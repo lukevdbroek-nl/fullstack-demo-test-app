@@ -9,28 +9,36 @@ let user = {
   username: ''
 }
 
+const instance = axios.create({
+  baseURL: 'http://localhost:3001',
+  headers: {
+    'x-api-key': import.meta.env.VITE_MAIN_API_KEY
+  }
+});
+
 const createUser = () => {
-  axios.post('http://localhost:3001/createUser', {
+  instance.post('http://localhost:3001/api/createUser', {
     name: user.name,
     age: user.age,
     username: user.username
   })
-    .then(response => {
-      alert('User created successfully');
-    })
-    .catch(error => {
-      console.error(error);
-    });
+  .then(response => {
+    alert('User created successfully');
+    // Optionally, refresh the list of users after creating a new user
+  })
+  .catch(error => {
+    console.error(error);
+  });
 }
 
 onBeforeMount(() => {
-  axios.get('http://localhost:3001/getUsers')
-    .then(response => {
-      listOfUsers.value = response.data;
-    })
-    .catch(error => {
-      console.error(error);
-    });
+  instance.get('http://localhost:3001/api/getUsers')
+  .then(response => {
+    listOfUsers.value = response.data;
+  })
+  .catch(error => {
+    console.error(error);
+  });
 })
 </script>
 
